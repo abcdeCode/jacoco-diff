@@ -5,10 +5,10 @@ from git import Repo
 
 
 class DiffProcessor():
-    def __init__(self, project_dir, old_version, module_name):
+    def __init__(self, project_dir, old_version):
         self.project_dir = project_dir
         self.old_version = old_version
-        self.module_name = module_name
+        # self.module_name = module_name
         self.repo = Repo(self.project_dir)
 
     def resolve_file_info(self, file_name):
@@ -119,7 +119,7 @@ class DiffProcessor():
 
             module_name, package, class_, is_interface = self.resolve_file_info(file_name)
             # 过滤掉接口和非指定的module
-            if is_interface or module_name != self.module_name:
+            if is_interface :
                 continue
 
             html_file_name = os.path.join(self.project_dir, module_name, 'target/site/jacoco/', package, "{}.java.html".format(class_))

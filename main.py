@@ -20,24 +20,24 @@ def main(argv):
     parser = argparse.ArgumentParser(description="计算增量覆盖率的工具")
     parser.add_argument('-dir', type=str, help="工程根目录")
     parser.add_argument('-old_version', type=str, default="HEAD~1", help='指定对比的版本号')
-    parser.add_argument('-module', type=str, help="需要处理的子模块")
+    # parser.add_argument('-module', type=str, help="需要处理的子模块")
     opts = parser.parse_args(argv[1:])
-    if opts.dir is None or opts.module is None:
+    if opts.dir is None :
         parser.print_help()
         sys.exit()
 
     # 获取增量覆盖率信息
-    processor = DiffProcessor(opts.dir, opts.old_version, opts.module)
+    processor = DiffProcessor(opts.dir, opts.old_version)
     diff_cov_info = processor.process_diff()
 
     # 写入redis
-    job_name = argv[4]
-    build_id = argv[5]
+    job_name = argv[3]
+    build_id = argv[4]
     key = "{}-{}".format(job_name, build_id)
 
     # 拷贝 css 和图片资源
-    shutil.copy('diff.gif', os.path.join(opts.dir, opts.module, "target/site/jacoco/jacoco-resources"))
-    shutil.copy('report.css', os.path.join(opts.dir, opts.module, "target/site/jacoco/jacoco-resources"))
+    shutil.copy('diff.gif', os.path.join(opts.dir,  "target/site/jacoco/jacoco-resources"))
+    shutil.copy('report.css', os.path.join(opts.dir,  "target/site/jacoco/jacoco-resources"))
 
     return 0
 
